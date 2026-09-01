@@ -1,17 +1,25 @@
-import { fetchPostBySlug } from '@repo/api/blog';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { fetchPostBySlug, fetchPosts } from '@repo/api/blog'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+
+export async function generateStaticParams() {
+  const posts = await fetchPosts(10)
+
+  return posts.map((post) => ({
+    slug: post.slug,
+  }))
+}
 
 type Props = {
-  params: Promise<{ slug: string }>;
-};
+  params: Promise<{ slug: string }>
+}
 
 export default async function PostPage({ params }: Props) {
-  const { slug } = await params;
-  const post = await fetchPostBySlug(slug);
+  const { slug } = await params
+  const post = await fetchPostBySlug(slug)
 
   if (!post) {
-    notFound();
+    notFound()
   }
 
   return (
@@ -23,11 +31,14 @@ export default async function PostPage({ params }: Props) {
       <article className="flex flex-col gap-4">
         <header className="flex flex-col gap-2">
           <h1 className="font-bold text-4xl">{post.title}</h1>
+
           <p className="text-sm text-gray-500">
-            {post.category} · {post.readingTime} min read ·{' '}
-            {post.publishedAt.toLocaleDateString()}
+            {post.category} · {post.readingTime} min read
           </p>
-          <p className="text-sm text-gray-500">By {post.author.name}</p>
+
+          <p className="text-sm text-gray-500">
+            By {post.author.name}
+          </p>
         </header>
 
         <div className="prose max-w-none">
@@ -37,18 +48,7 @@ export default async function PostPage({ params }: Props) {
             </p>
           ))}
         </div>
-
-        <footer className="flex flex-wrap gap-2 border-t pt-4">
-          {post.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded bg-gray-100 px-2 py-1 text-sm text-gray-600"
-            >
-              {tag}
-            </span>
-          ))}
-        </footer>
       </article>
     </main>
-  );
+  )
 }
