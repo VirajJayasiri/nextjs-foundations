@@ -1,3 +1,5 @@
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 
@@ -30,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html className={`${inter.variable} ${jetbrainsMono.variable}`} lang="en">
       <body className="container mx-auto px-4 py-8">
         {children}
         {/* TODO: Convert to next/script (Section 4 Lesson 3) */}
@@ -48,6 +50,8 @@ export default function RootLayout({
             `,
           }}
         />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
