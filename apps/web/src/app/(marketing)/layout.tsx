@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function MarketingLayout({
   children,
 }: {
@@ -7,9 +9,9 @@ export default function MarketingLayout({
     <div className="min-h-screen">
       <header className="mb-8 border-b py-4">
         <nav className="flex gap-4">
-          <a href="/" className="font-semibold">Home</a>
-          <a href="/about" className="text-gray-600 hover:text-gray-900">About</a>
-          <a href="/pricing" className="text-gray-600 hover:text-gray-900">Pricing</a>
+          <Link href="/" className="font-semibold">Home</Link>
+          <Link href="/about" className="text-gray-600 hover:text-gray-900">About</Link>
+          <Link href="/pricing" className="text-gray-600 hover:text-gray-900">Pricing</Link>
         </nav>
       </header>
       <main>{children}</main>
