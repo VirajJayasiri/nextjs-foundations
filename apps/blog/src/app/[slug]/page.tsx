@@ -1,5 +1,6 @@
 import { fetchPostBySlug, fetchPosts } from '@repo/api/blog'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 export async function generateStaticParams() {
@@ -12,6 +13,44 @@ export async function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const post = await fetchPostBySlug(slug)
+
+  if (!post) {
+    return {}
+  }
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    keywords: post.tags,
+    authors: [{ name: post.author.name }],
+    openGraph: {
+      type: 'article',
+      title: post.title,
+      description: post.excerpt,
+      publishedTime: post.publishedAt.toISOString(),
+      section: post.category,
+      tags: post.tags,
+      images: [
+        {
+          url: post.coverImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
+      images: [post.coverImage],
+    },
+  }
 }
 
 export default async function PostPage({ params }: Props) {
