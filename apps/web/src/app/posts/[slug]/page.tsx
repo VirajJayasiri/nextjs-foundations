@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -14,7 +15,7 @@ const posts = [
   },
 ]
 
-export default async function PostPage(props: {
+async function PostContent(props: {
   params: Promise<{ slug: string }>
 }) {
   const params = await props.params
@@ -32,5 +33,15 @@ export default async function PostPage(props: {
       <h1 className="mt-6 mb-4 font-bold text-3xl">{post.title}</h1>
       <p className="text-gray-600">{post.content}</p>
     </main>
+  )
+}
+
+export default function PostPage(props: {
+  params: Promise<{ slug: string }>
+}) {
+  return (
+    <Suspense fallback={<main className="mx-auto max-w-2xl p-8">Loading post...</main>}>
+      <PostContent params={props.params} />
+    </Suspense>
   )
 }

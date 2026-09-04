@@ -1,6 +1,16 @@
+import { cacheLife } from 'next/cache'
+
 import { Counter } from '@/components/counter'
 
 async function getServerTimestamp(): Promise<string> {
+  'use cache'
+
+  cacheLife({
+    stale: 60,
+    revalidate: 10,
+    expire: 3600,
+  })
+
   return new Date().toISOString()
 }
 

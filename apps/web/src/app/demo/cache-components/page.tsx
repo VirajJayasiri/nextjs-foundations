@@ -11,6 +11,8 @@ import { cacheLife } from 'next/cache';
 
 // Simulate fetching fresh data
 async function getTimestamp() {
+  'use cache';
+
   // Call cacheLife() at the top of your async function
   // to set caching behavior for this component's data
   cacheLife({

@@ -1,4 +1,6 @@
-export default async function ShopPage(props: {
+import { Suspense } from 'react'
+
+async function DocsContent(props: {
   params: Promise<{ slug?: string[] }>
 }) {
   const params = await props.params
@@ -28,5 +30,15 @@ export default async function ShopPage(props: {
         </div>
       )}
     </div>
+  )
+}
+
+export default async function ShopPage(props: {
+  params: Promise<{ slug?: string[] }>
+}) {
+  return (
+    <Suspense fallback={<div className="p-8">Loading docs...</div>}>
+      <DocsContent params={props.params} />
+    </Suspense>
   )
 }

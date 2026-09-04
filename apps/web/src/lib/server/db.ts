@@ -1,7 +1,9 @@
 import "server-only";
  
 // Simulate a database call that uses server secrets
-export function getUserFromDB(userId: string) {
+export async function getUserFromDB(userId: string) {
+  "use cache";
+
   // In real code, this would use process.env.DATABASE_URL
   // The INTERNAL_CONFIG demonstrates server-only variable access
   const config = process.env.INTERNAL_CONFIG ?? "default";

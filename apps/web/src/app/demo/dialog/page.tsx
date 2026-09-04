@@ -1,3 +1,4 @@
+import { cacheLife } from 'next/cache';
 import { Button } from '@repo/ui/components/button';
 import {
   DialogClose,
@@ -10,12 +11,20 @@ import {
   DialogTrigger,
 } from '@repo/ui/components/dialog';
 
-function getTermsContent() {
+async function getTermsContent() {
+  'use cache';
+
+  cacheLife({
+    stale: 60,
+    revalidate: 10,
+    expire: 3600,
+  });
+
   return `These terms were last updated on ${new Date().toLocaleDateString()}. Server-rendered content can be passed through a client dialog wrapper.`;
 }
 
-export default function DialogDemoPage() {
-  const termsContent = getTermsContent();
+export default async function DialogDemoPage() {
+  const termsContent = await getTermsContent();
 
   return (
     <main className="flex flex-col gap-8 p-8">

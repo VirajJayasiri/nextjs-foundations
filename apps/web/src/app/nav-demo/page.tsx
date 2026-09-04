@@ -1,12 +1,22 @@
+import { cacheLife } from "next/cache";
 import Link from "next/link";
-import { connection } from "next/server";
 
 import { NavigationButtons } from "./navigation-buttons";
 
-export default async function NavDemoPage() {
-  await connection();
+async function getServerTimestamp() {
+  "use cache";
 
-  const serverTimestamp = Date.now();
+  cacheLife({
+    stale: 60,
+    revalidate: 10,
+    expire: 3600,
+  });
+
+  return Date.now();
+}
+
+export default async function NavDemoPage() {
+  const serverTimestamp = await getServerTimestamp();
 
   return (
     <main className="mx-auto max-w-2xl p-8">

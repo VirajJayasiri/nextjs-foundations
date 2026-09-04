@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { fetchPosts, fetchStats, fetchUser } from "./data";
 
 async function fetchParallel() {
@@ -30,7 +32,7 @@ async function fetchParallel() {
   };
 }
 
-export default async function DataDemoPage() {
+async function DataDemoContent() {
   const { user, posts, stats, duration } = await fetchParallel();
 
   return (
@@ -93,5 +95,13 @@ const [user, posts, stats] = await Promise.all([
         </pre>
       </div>
     </main>
+  );
+}
+
+export default function DataDemoPage() {
+  return (
+    <Suspense fallback={<main className="mx-auto max-w-2xl p-8">Loading data...</main>}>
+      <DataDemoContent />
+    </Suspense>
   );
 }
