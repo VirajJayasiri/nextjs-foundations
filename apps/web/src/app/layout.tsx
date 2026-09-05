@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
@@ -35,21 +36,9 @@ export default function RootLayout({
     <html className={`${inter.variable} ${jetbrainsMono.variable}`} lang="en">
       <body className="container mx-auto px-4 py-8">
         {children}
-        {/* TODO: Convert to next/script (Section 4 Lesson 3) */}
-        <script
-          src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
-          async
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'GA_MEASUREMENT_ID');
-            `,
-          }}
-        />
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        )}
         <Analytics />
         <SpeedInsights />
       </body>
